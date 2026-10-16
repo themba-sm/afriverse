@@ -57,6 +57,17 @@ export default function App() {
     return () => window.removeEventListener('hashchange', onHash);
   }, []);
 
+  // First-load deep links: scroll to the section once the app has rendered
+  // (the browser fires its anchor scroll before the SPA mounts, so it is lost).
+  useEffect(() => {
+    if (ind) return undefined;
+    const t = setTimeout(() => {
+      const m = window.location.hash.match(/^#([\w-]+)$/);
+      if (m) document.getElementById(m[1])?.scrollIntoView();
+    }, 350);
+    return () => clearTimeout(t);
+  }, [ind]);
+
   useEffect(() => {
     const d = ind ? INDUSTRY_PAGES[ind] : null;
     document.title = d ? d.metaTitle : DEFAULT_TITLE;
