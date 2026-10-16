@@ -12,8 +12,10 @@
 .site-header { position: fixed; inset: 0 0 auto 0; z-index: 100; height: var(--header-h); transition: background-color .25s ease, border-color .25s ease, backdrop-filter .25s ease; border-bottom: 1px solid transparent; }
 .site-header.is-scrolled { background: rgba(5, 5, 8, .88); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px); border-bottom-color: var(--c-line-dark); }
 .site-header__bar { height: var(--header-h); display: flex; align-items: center; justify-content: space-between; gap: 1rem; }
-.brand-link { display: inline-flex; align-items: center; gap: .7rem; text-decoration: none; background: var(--c-black); border-radius: 12px; padding: .3rem .7rem .3rem .4rem; }
+.brand-link { flex: 0 1 auto; min-width: 0; display: inline-flex; align-items: center; gap: .7rem; text-decoration: none; background: var(--c-black); border-radius: 12px; padding: .3rem .7rem .3rem .4rem; }
 .logo-emblem, .logo-wordmark, .logo-full { mix-blend-mode: screen; }
+.logo-wordmark { max-width: 100%; }
+.site-header__actions { flex: none; }
 .nav-desktop { display: none; }
 .nav-desktop ul { display: flex; gap: .25rem; }
 .nav-desktop a { display: block; padding: .5rem .85rem; font-size: .9rem; color: var(--c-grey); text-decoration: none; border-radius: 999px; transition: color .2s ease, background-color .2s ease; }
@@ -22,7 +24,7 @@
 .header-cta { display: none; }
 .menu-toggle { width: 44px; height: 44px; display: grid; place-items: center; background: transparent; border: 1px solid var(--c-line-dark-strong); border-radius: 12px; color: var(--c-white); }
 .menu-toggle:hover { border-color: var(--c-white); }
-.mobile-menu { position: fixed; inset: var(--header-h) 0 0 0; background: var(--c-black); padding: 1.5rem var(--gutter) 2rem; display: flex; flex-direction: column; gap: 1.5rem; overflow-y: auto; }
+.mobile-menu { position: fixed; inset: var(--header-h) 0 0 0; width: 100%; max-width: 100%; overscroll-behavior: contain; background: var(--c-black); padding: 1.5rem var(--gutter) 2rem; display: flex; flex-direction: column; gap: 1.5rem; overflow-y: auto; }
 .mobile-menu[hidden] { display: none; }
 .mobile-menu li a { display: flex; align-items: center; justify-content: space-between; padding: 1.1rem 0; font-size: 1.35rem; letter-spacing: -.02em; text-decoration: none; border-bottom: 1px solid var(--c-line-dark); }
 @media (min-width: 980px) {
@@ -32,7 +34,7 @@
 }
 
 /* ---------- Hero (signature, ivory) ---------- */
-.hero { position: relative; overflow: hidden; padding-bottom: 0; }
+.hero { position: relative; overflow: hidden; overflow: clip; padding-bottom: 0; }
 .hero__grid-bg {
   position: absolute; inset: 0; pointer-events: none; opacity: .5;
   background-image: linear-gradient(var(--c-line-light) 1px, transparent 1px), linear-gradient(90deg, var(--c-line-light) 1px, transparent 1px);
@@ -54,8 +56,11 @@
 .hero__title { max-width: 15ch; }
 .hero__lead { margin-inline: auto; max-width: 46ch; }
 .hero__actions { display: flex; flex-wrap: wrap; gap: .8rem; justify-content: center; margin-top: 2.1rem; }
-.hero__hand { position: relative; display: flex; justify-content: center; margin-top: clamp(1.5rem, 4vw, 3rem); line-height: 0; }
-.hero__hand img { height: clamp(300px, 46vh, 520px); width: auto; }
+.hero__hand { position: relative; width: 100%; margin-top: clamp(1.5rem, 4vw, 3rem); line-height: 0; overflow: hidden; contain: paint; }
+/* The artwork is a very wide (4484x964) beige field with the hand centred. It is
+   sized by HEIGHT only and centred inside a clipping box, so it can never be
+   wider than its parent in layout terms. */
+.hero__hand img { display: block; position: relative; left: 50%; transform: translateX(-50%); height: clamp(300px, 46vh, 520px); width: auto; max-width: none; }
 @media (min-width: 980px) {
   .hero__hand img { height: clamp(440px, 56vh, 600px); }
 }
@@ -347,6 +352,33 @@
 .field__check input { width: 17px; height: 17px; margin-top: .1rem; accent-color: #1f74e6; flex: none; }
 .field--check.has-error .field__check { color: #b3271d; }
 .field__hint { margin: .9rem 0 0; font-size: .76rem; color: var(--c-ink-soft); }
-.hp-field { position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden; }
+.hp-field { position: absolute; left: 0; top: 0; width: 1px; height: 1px; opacity: 0; overflow: hidden; clip-path: inset(50%); pointer-events: none; }
 .btn:disabled { opacity: .6; cursor: default; }
 .form-done:focus { outline: 2px solid #1f74e6; outline-offset: 4px; border-radius: 6px; }
+
+
+/* ---------- Official brand mark tile ---------- */
+.brand-mark { flex: none; display: inline-grid; place-items: center; width: var(--bm, 52px); height: var(--bm, 52px); padding: calc(var(--bm, 52px) * .17); border-radius: calc(var(--bm, 52px) * .27); background: var(--c-black); border: 1px solid rgba(130,85,246,.35); box-shadow: 0 10px 22px -12px rgba(93,63,216,.55); }
+.brand-mark img { width: 100%; height: 100%; object-fit: contain; mix-blend-mode: screen; }
+.service__icon.brand-mark, .industry__mark.brand-mark, .ind-ui__icon.brand-mark { margin-bottom: .5rem; background: var(--c-black); }
+.ind-ui__icon.brand-mark { margin-bottom: 0; }
+.service__icon.brand-mark, .industry__mark.brand-mark { width: 52px; height: 52px; }
+.ind-0 .industry__mark, .ind-1 .industry__mark, .ind-2 .industry__mark, .ind-3 .industry__mark, .ind-4 .industry__mark { background: var(--c-black); }
+
+/* ---------- Footer logo: natural proportions at every width ---------- */
+.footer__brand { min-width: 0; }
+.footer__logo { display: block; width: 100%; max-width: min(300px, 80vw); height: auto; aspect-ratio: 964 / 810; object-fit: contain; margin-inline: 0; }
+@media (max-width: 859px) {
+  .footer__brand { display: flex; flex-direction: column; align-items: center; text-align: center; }
+  .footer__logo { max-width: min(300px, 78%); margin-inline: auto; }
+  .footer__brand p { margin-inline: auto; }
+}
+
+/* ---------- Mobile safety net (<= 480px) ---------- */
+@media (max-width: 480px) {
+  .hero__actions { width: 100%; }
+  .hero__actions .btn { width: 100%; }
+  .pricing__chips { max-width: 100%; }
+  .plan__badge { max-width: calc(100% - 1.5rem); white-space: normal; text-align: center; }
+  .footer__bar { flex-direction: column; align-items: flex-start; }
+}

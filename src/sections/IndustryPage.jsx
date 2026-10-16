@@ -3,7 +3,8 @@ import Accordion from '../components/Accordion.jsx';
 import ConsultationForm from '../components/ConsultationForm.jsx';
 import Pricing from './Pricing.jsx';
 import { INDUSTRY_PAGES } from '../data/industries.js';
-import { IndustryIcon, Check, Arrow } from '../components/Icons.jsx';
+import { Check, Arrow } from '../components/Icons.jsx';
+import { BrandMark } from '../components/Logo.jsx';
 import { toSection } from '../lib/nav.js';
 
 /*
@@ -50,7 +51,7 @@ export default function IndustryPage({ id }) {
             </div>
             <Reveal className="ind-ui" aria-hidden="true">
               <div className="ind-ui__head">
-                <span className="ind-ui__icon"><IndustryIcon id={id} /></span>
+                <BrandMark className="ind-ui__icon" size={40} />
                 <p>{d.ui.title}</p>
               </div>
               <ul>

@@ -1,6 +1,7 @@
 import Reveal from '../components/Reveal.jsx';
 import { INDUSTRIES } from '../data/site.js';
-import { IndustryIcon, Check, Arrow } from '../components/Icons.jsx';
+import { Check, Arrow } from '../components/Icons.jsx';
+import { BrandMark } from '../components/Logo.jsx';
 
 /* Each card opens that industry's dedicated solution page, which carries
    the industry into its own consultation form and pricing view. */
@@ -21,7 +22,7 @@ export default function Industries() {
         <ul className="industries__grid">
           {INDUSTRIES.map((ind, i) => (
             <Reveal as="li" key={ind.id} delay={(i % 3) * 70} className={`industry card--paper ind-${i % 5}`}>
-              <span className="industry__mark" aria-hidden="true"><IndustryIcon id={ind.id} /></span>
+              <BrandMark className="industry__mark" />
               <h3 className="h3">{ind.name}</h3>
               <p className="muted">{ind.summary}</p>
               <ul className="industry__uses">

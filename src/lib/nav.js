@@ -5,6 +5,7 @@
  * once it has rendered. Local URLs are kept untouched so refreshing an
  * industry page keeps its route.
  */
+export let pendingSection = null;
 export const onIndustryRoute = () => window.location.hash.startsWith('#/industry/');
 
 export function toSection(id) {
@@ -14,14 +15,19 @@ export function toSection(id) {
       // Same page: scroll directly, keep the current URL.
       e.preventDefault();
       target.scrollIntoView({ behavior: 'smooth' });
-      if (!onIndustryRoute()) window.history.replaceState(null, '', `#${id}`);
+      // Deliberately NOT writing "#section" into the URL: a persisted hash made
+      // every refresh jump back to that section instead of the top of the page.
       return;
     }
     // Target lives on the homepage: route there, then scroll after render.
     e.preventDefault();
-    window.location.hash = `#${id}`;
+    // Leave an industry route by clearing the hash (back button returns to it),
+    // then scroll once the homepage has rendered.
+    window.location.hash = '';
+    pendingSection = id;
     setTimeout(() => {
       document.getElementById(id)?.scrollIntoView({ block: 'start' });
-    }, 400);
+      pendingSection = null;
+    }, 450);
   };
 }

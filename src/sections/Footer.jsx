@@ -9,7 +9,7 @@ export default function Footer() {
     <footer className="site-footer">
       <div className="container footer__grid">
         <div className="footer__brand">
-          <LogoFull width={200} loading="lazy" />
+          <LogoFull className="footer__logo" loading="lazy" />
           <p className="muted">AI automation and integration for businesses that want less manual work and more room to grow.</p>
         </div>
         <nav aria-label="Website sections">
