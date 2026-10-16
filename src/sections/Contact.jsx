@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { INDUSTRIES, SITE } from '../data/site.js';
 import { Arrow } from '../components/Icons.jsx';
 
@@ -25,6 +25,13 @@ export default function Contact() {
   const [errors, setErrors] = useState({});
   const [done, setDone] = useState(null);
   const [copied, setCopied] = useState(false);
+
+  // "Explore Solutions" links in the industry grid preselect the industry here.
+  useEffect(() => {
+    const pick = (e) => setValues((s) => ({ ...s, industry: e.detail }));
+    window.addEventListener('afriverse:industry', pick);
+    return () => window.removeEventListener('afriverse:industry', pick);
+  }, []);
 
   const set = (k) => (e) => {
     setValues((s) => ({ ...s, [k]: e.target.value }));
@@ -57,13 +64,25 @@ export default function Contact() {
 
   const reset = () => { setValues(EMPTY); setDone(null); setErrors({}); setCopied(false); };
 
+  const toForm = (e) => {
+    e.preventDefault();
+    document.getElementById('contact-form-card')?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  };
+
   return (
-    <section id="contact" className="section section--ivory on-ivory contact" aria-labelledby="contact-title">
+    <section id="contact" className="section section--dark contact contact--final" aria-labelledby="contact-title">
       <div className="container contact__grid">
         <div className="contact__copy">
-          <p className="eyebrow">Consultation &amp; contact</p>
-          <h2 id="contact-title" className="h2">Tell us where your time is going.</h2>
-          <p className="lead">A short conversation is enough to find the one or two automations that would make the biggest difference. No obligation, no jargon.</p>
+          <p className="eyebrow">Start the conversation</p>
+          <h2 id="contact-title" className="h2">Your Next Business Advantage Starts With a Conversation.</h2>
+          <p className="lead">
+            Tell us how your business operates, where time is being lost, and what you would like to improve.
+            Let&rsquo;s explore what intelligent automation could make possible.
+          </p>
+          <div className="contact__ctas">
+            <a href="#contact-form-card" className="btn btn--primary" onClick={toForm}>Book a Consultation <Arrow className="arrow" width={18} height={18} /></a>
+            <a href="#industries" className="btn btn--ghost">Explore Industries</a>
+          </div>
           <ul className="contact__points">
             <li>Describe your business and your biggest time drain</li>
             <li>We suggest the smallest change that helps most</li>
@@ -71,7 +90,7 @@ export default function Contact() {
           </ul>
         </div>
 
-        <div className="contact__card card card--light">
+        <div id="contact-form-card" className="contact__card card card--light">
           {done ? (
             <div className="form-done" role="status">
               <h3 className="h3">{done.mailed ? 'Your email is ready to send' : 'Your enquiry is ready'}</h3>
@@ -117,7 +136,7 @@ export default function Contact() {
                 <textarea id="f-message" name="message" rows="5" value={values.message} onChange={set('message')} aria-invalid={!!errors.message} aria-describedby={errors.message ? 'e-message' : undefined} required />
                 {errors.message && <p className="field__error" id="e-message">{errors.message}</p>}
               </div>
-              <button type="submit" className="btn btn--dark btn--block">Request a Consultation <Arrow className="arrow" width={18} height={18} /></button>
+              <button type="submit" className="btn btn--dark btn--block">Book a Consultation <Arrow className="arrow" width={18} height={18} /></button>
             </form>
           )}
         </div>

@@ -1,62 +1,42 @@
-import { useRef, useState } from 'react';
+import Reveal from '../components/Reveal.jsx';
 import { INDUSTRIES } from '../data/site.js';
-import { Check, Arrow } from '../components/Icons.jsx';
+import { IndustryIcon, Check, Arrow } from '../components/Icons.jsx';
 
-/* Accessible tabs: roving tabindex, arrow/Home/End keys. */
+/* "Explore Solutions" preselects the industry in the consultation form and
+   scrolls the visitor to it, so the link is functional, not decorative. */
+const explore = (ind) => (e) => {
+  window.dispatchEvent(new CustomEvent('afriverse:industry', { detail: ind.name }));
+  document.getElementById('contact-form-card')?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+};
+
 export default function Industries() {
-  const [active, setActive] = useState(0);
-  const tabs = useRef([]);
-  const current = INDUSTRIES[active];
-
-  const onKeyDown = (e) => {
-    const n = INDUSTRIES.length;
-    let next = null;
-    if (e.key === 'ArrowDown' || e.key === 'ArrowRight') next = (active + 1) % n;
-    if (e.key === 'ArrowUp' || e.key === 'ArrowLeft') next = (active - 1 + n) % n;
-    if (e.key === 'Home') next = 0;
-    if (e.key === 'End') next = n - 1;
-    if (next !== null) { e.preventDefault(); setActive(next); tabs.current[next]?.focus(); }
-  };
-
   return (
-    <section id="industries" className="section section--charcoal" aria-labelledby="industries-title">
+    <section id="industries" className="section section--ivory on-ivory" aria-labelledby="industries-title">
       <div className="container">
         <div className="section-head">
           <p className="eyebrow">Industry solutions</p>
-          <h2 id="industries-title" className="h2">Built for the way your industry actually runs.</h2>
-          <p className="lead">Every sector has its own rhythm of enquiries, bookings and follow-up. Select yours to see how automation can fit.</p>
+          <h2 id="industries-title" className="h2">Built Around the Way Your Industry Works.</h2>
+          <p className="lead">
+            Different industries have different operational challenges. Explore automation opportunities
+            tailored to the way your business attracts customers, manages enquiries, and delivers its services.
+          </p>
         </div>
 
-        <div className="industries">
-          <div className="industries__tabs" role="tablist" aria-label="Industries" aria-orientation="vertical" onKeyDown={onKeyDown}>
-            {INDUSTRIES.map((ind, i) => (
-              <button
-                key={ind.id}
-                ref={(el) => (tabs.current[i] = el)}
-                role="tab"
-                id={`tab-${ind.id}`}
-                aria-selected={active === i}
-                aria-controls="industry-panel"
-                tabIndex={active === i ? 0 : -1}
-                className={`industry-tab ${active === i ? 'is-active' : ''}`}
-                onClick={() => setActive(i)}
-              >
-                <span className="industry-tab__n" aria-hidden="true">{String(i + 1).padStart(2, '0')}</span>
-                <span>{ind.name}</span>
-              </button>
-            ))}
-          </div>
-
-          <div id="industry-panel" role="tabpanel" aria-labelledby={`tab-${current.id}`} tabIndex={0} className="industry-panel card" key={current.id}>
-            <p className="eyebrow">{current.name}</p>
-            <h3 className="h2 industry-panel__title">{current.summary}</h3>
-            <h4 className="industry-panel__sub">Where automation can help</h4>
-            <ul className="industry-panel__uses">
-              {current.uses.map((u) => (<li key={u}><Check width={18} height={18} />{u}</li>))}
-            </ul>
-            <a href="#contact" className="btn btn--primary">Discuss Your Workflow <Arrow className="arrow" width={18} height={18} /></a>
-          </div>
-        </div>
+        <ul className="industries__grid">
+          {INDUSTRIES.map((ind, i) => (
+            <Reveal as="li" key={ind.id} delay={(i % 3) * 70} className={`industry card--paper ind-${i % 5}`}>
+              <span className="industry__mark" aria-hidden="true"><IndustryIcon id={ind.id} /></span>
+              <h3 className="h3">{ind.name}</h3>
+              <p className="muted">{ind.summary}</p>
+              <ul className="industry__uses">
+                {ind.uses.map((u) => (<li key={u}><Check width={15} height={15} />{u}</li>))}
+              </ul>
+              <a href="#contact" className="industry__link" onClick={explore(ind)}>
+                Explore Solutions <Arrow className="arrow" width={16} height={16} />
+              </a>
+            </Reveal>
+          ))}
+        </ul>
       </div>
     </section>
   );
