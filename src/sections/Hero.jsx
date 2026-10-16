@@ -50,7 +50,7 @@ export default function Hero() {
 
         <figure className="hero__hand">
           <img
-            src="/brand/hero-hand.png"
+            src="/brand/hero-hand.webp"
             width="884" height="964"
             alt="A hand holding a premium connected AI device engraved with the AFRIVERSE emblem"
             decoding="async"
