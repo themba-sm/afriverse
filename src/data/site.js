@@ -189,36 +189,140 @@ export const WORKFLOWS = [
   },
 ];
 
-// Plans describe scope, not price. Real pricing is confirmed after a
-// consultation, so no figures are shown.
-export const BILLING = {
-  once: { id: 'once', label: 'Project build', note: 'One-time setup' },
-  ongoing: { id: 'ongoing', label: 'Ongoing support', note: 'Setup plus monthly care' },
-};
+// ------------------------------------------------------------------
+// Pricing. Official prices do not exist yet, so every plan shows
+// "Custom quote" and no billing selector is rendered. When real prices
+// arrive, add price/billing fields here and the page picks them up
+// without a redesign. Nothing here may invent figures, discounts,
+// trials or guarantees.
+// ------------------------------------------------------------------
 
 export const PLANS = [
   {
-    id: 'launch', name: 'Launch', blurb: 'One focused automation to remove your most repetitive task.',
-    price: { once: 'Quoted after consultation', ongoing: 'Quoted after consultation' },
-    cta: 'Request a Consultation',
-    includesLabel: 'Launch includes',
-    features: ['One core workflow, mapped and built', 'Up to two connected tools', 'Testing before go-live', 'Handover walkthrough'],
+    id: 'essential', name: 'Essential',
+    desc: 'A starting point for a business with one clearly defined automation requirement.',
+    price: 'Custom quote',
+    cta: 'Request a Quote',
+    featured: false,
+    features: [
+      'Initial workflow assessment',
+      'One defined core workflow',
+      'Agreed setup and testing',
+      'Handover documentation',
+    ],
+    suits: 'For a first automation: one repetitive process you want off your team\u2019s hands.',
   },
   {
-    id: 'growth', name: 'Growth', blurb: 'A connected set of automations across enquiries, booking and follow-up.', featured: true,
-    price: { once: 'Quoted after consultation', ongoing: 'Quoted after consultation' },
-    cta: 'Discuss Your Workflow',
-    includesLabel: 'Everything in Launch, plus',
-    features: ['Multiple connected workflows', 'AI assistant for enquiries and booking', 'Messaging and calendar integration', 'Reporting on enquiries and bookings', 'Priority support during rollout'],
+    id: 'growth', name: 'Growth',
+    desc: 'For businesses that want to connect multiple related processes into one flow.',
+    price: 'Custom quote',
+    cta: 'Discuss This Plan',
+    featured: true,
+    features: [
+      'Broader workflow design',
+      'Multiple related automations',
+      'Relevant system integrations',
+      'More comprehensive enquiry and follow-up processes',
+      'Agreed reporting or operational visibility',
+    ],
+    suits: 'For teams juggling enquiries, bookings and follow-ups across several tools at once.',
   },
   {
-    id: 'partner', name: 'Partner', blurb: 'A longer-term engagement for businesses that want automation to keep evolving.',
-    price: { once: 'Quoted after consultation', ongoing: 'Quoted after consultation' },
-    cta: 'Request a Consultation',
-    includesLabel: 'Everything in Growth, plus',
-    features: ['Multi-location or multi-team setups', 'Custom integrations', 'Regular reviews and improvements', 'Dedicated point of contact'],
+    id: 'scale', name: 'Scale',
+    desc: 'For broader, more complex automation requirements across teams or locations.',
+    price: 'Custom quote',
+    cta: 'Request a Quote',
+    featured: false,
+    features: [
+      'Multiple interconnected workflows',
+      'More complex integration requirements',
+      'Tailored orchestration and reporting',
+      'Expanded implementation and documentation',
+      'Support arrangements agreed for the engagement',
+    ],
+    suits: 'For established operations that need automation designed around the whole business.',
   },
 ];
+
+// Proposed example workflows per industry, per plan. These are illustrations
+// shaped for each industry, not confirmed deliverables; actual scope is set
+// in the final proposal.
+export const PRICING_EXAMPLES = {
+  general: {
+    label: 'General business',
+    essential: ['Enquiry capture and routing', 'Basic follow-up scheduling'],
+    growth: ['Connected enquiry, booking and follow-up workflows', 'Reporting on enquiries and response times'],
+    scale: ['Multi-workflow orchestration across teams', 'Tailored reporting and agreed support arrangements'],
+  },
+  'real-estate': {
+    label: 'Real Estate',
+    essential: ['Property enquiry capture and lead routing'],
+    growth: ['Enquiry management, viewing coordination and follow-up workflows'],
+    scale: ['Broader property lead workflows, system integration and reporting'],
+  },
+  legal: {
+    label: 'Legal Services',
+    essential: ['Initial enquiry intake and consultation scheduling'],
+    growth: ['Client onboarding and agreed document-related administrative workflows'],
+    scale: ['Broader matter-administration workflows and approved system integrations'],
+  },
+  construction: {
+    label: 'Construction & Contracting',
+    essential: ['Project enquiry capture and routing'],
+    growth: ['Quotation request workflows, follow-ups and project enquiry coordination'],
+    scale: ['Broader enquiry-to-administration workflows and reporting'],
+  },
+  professional: {
+    label: 'Professional Services',
+    essential: ['Client enquiry capture and appointment coordination'],
+    growth: ['Onboarding, proposal follow-ups and connected CRM workflows'],
+    scale: ['Broader client lifecycle workflows and reporting'],
+  },
+  salon: {
+    label: 'Salon & Beauty',
+    essential: ['Booking enquiries and appointment reminders'],
+    growth: ['Booking coordination, rebooking workflows and customer follow-ups'],
+    scale: ['Broader customer communication and retention workflows'],
+  },
+  fitness: {
+    label: 'Fitness & Wellness',
+    essential: ['Membership enquiries and trial-session booking workflows'],
+    growth: ['Prospect follow-ups, onboarding communications and member engagement'],
+    scale: ['Broader membership-related workflows and reporting'],
+  },
+  automotive: {
+    label: 'Automotive',
+    essential: ['Vehicle or service enquiries and lead routing'],
+    growth: ['Test-drive coordination, service reminders and sales follow-ups'],
+    scale: ['Broader enquiry, service and reporting workflows'],
+  },
+  fashion: {
+    label: 'Fashion & Apparel',
+    essential: ['Product enquiry routing and customer support workflows'],
+    growth: ['Order communication and connected customer follow-ups'],
+    scale: ['Broader customer communication and relevant commerce-system integrations'],
+  },
+  barber: {
+    label: 'Barber Shops',
+    essential: ['Appointment enquiries and booking reminders'],
+    growth: ['Repeat-visit reminders and customer re-engagement'],
+    scale: ['Broader appointment and customer communication workflows'],
+  },
+  hospitality: {
+    label: 'Hospitality & Accommodation',
+    essential: ['Guest enquiry management and response workflows'],
+    growth: ['Reservation-related communication and pre-arrival workflows'],
+    scale: ['Broader guest communication, system integrations and reporting'],
+  },
+};
+
+// The ten industries a visitor can tailor the pricing view to.
+export const PRICING_INDUSTRIES = [
+  'real-estate', 'legal', 'construction', 'professional', 'salon',
+  'fitness', 'automotive', 'fashion', 'barber', 'hospitality',
+];
+
+export const PLANS_FOOTNOTE = 'Actual deliverables, usage limits, third-party software costs, support and maintenance depend on the final proposal. Example workflows are proposed illustrations for the selected industry, not confirmed deliverables.';
 
 export const FAQS = [
   { q: 'What does AI automation actually mean for a business?', a: 'It means software carries out the repetitive, predictable steps of your work, like capturing an enquiry, sending a reminder or updating a record, so your team handles only the parts that need a person. It is practical system work, not science fiction.' },

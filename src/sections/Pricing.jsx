@@ -1,54 +1,99 @@
-import { useState } from 'react';
-import { PLANS, BILLING } from '../data/site.js';
-import { Check } from '../components/Icons.jsx';
+import { useEffect, useState } from 'react';
+import { PLANS, PRICING_EXAMPLES, PRICING_INDUSTRIES, PLANS_FOOTNOTE } from '../data/site.js';
+import { Check, Arrow } from '../components/Icons.jsx';
 
 /*
- * Pricing layout follows the reference (three aligned cards, billing selector,
- * emphasised middle plan) in the AFRIVERSE blue-violet palette. Real prices are
- * not supplied, so no figures are shown; pricing is confirmed after a consultation.
+ * Pricing experience. Every plan shows "Custom quote" until official prices
+ * exist; no billing selector, no invented figures. The industry selector
+ * swaps in proposed example workflows per plan from structured data, and the
+ * selection is kept in the URL (?industry=) so a tailored view is shareable.
  */
+const allIndustries = ['general', ...PRICING_INDUSTRIES];
+
+const fromUrl = () => {
+  const id = new URLSearchParams(window.location.search).get('industry');
+  return allIndustries.includes(id) ? id : 'general';
+};
+
 export default function Pricing() {
-  const [mode, setMode] = useState('once');
+  const [industry, setIndustry] = useState(fromUrl);
+
+  const pick = (id) => {
+    setIndustry(id);
+    const url = new URL(window.location);
+    if (id === 'general') url.searchParams.delete('industry');
+    else url.searchParams.set('industry', id);
+    window.history.replaceState(null, '', url);
+  };
+
+  // Deep link support: if the industry param changes (e.g. browser back),
+  // keep the cards in sync.
+  useEffect(() => {
+    const sync = () => setIndustry(fromUrl());
+    window.addEventListener('popstate', sync);
+    return () => window.removeEventListener('popstate', sync);
+  }, []);
+
+  const ex = PRICING_EXAMPLES[industry];
+
+  const choose = (plan) => (e) => {
+    e.preventDefault();
+    window.dispatchEvent(new CustomEvent('afriverse:plan', {
+      detail: { plan: plan.name, industry: industry === 'general' ? '' : ex.label },
+    }));
+    document.getElementById('contact-form-card')?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  };
 
   return (
-    <section id="plans" className="section section--charcoal pricing" aria-labelledby="plans-title">
+    <section id="plans" className="section section--dark pricing" aria-labelledby="plans-title">
       <div className="container">
         <div className="section-head section-head--center">
-          <p className="eyebrow" style={{ justifyContent: 'center' }}>Plans</p>
-          <h2 id="plans-title" className="h2">Choose the right level of automation for your business.</h2>
-          <p className="lead">Three ways to work together. Final pricing is confirmed after a short consultation, based on scope.</p>
+          <p className="eyebrow" style={{ justifyContent: 'center' }}>Pricing</p>
+          <h2 id="plans-title" className="h2">Choose the Right Automation Strategy for Your Business</h2>
+          <p className="lead">Start with the processes that matter most, then expand as your business and requirements evolve.</p>
         </div>
 
-        <fieldset className="billing">
-          <legend className="visually-hidden">Engagement type</legend>
-          {Object.values(BILLING).map((b) => (
-            <label key={b.id} className={`billing__opt ${mode === b.id ? 'is-active' : ''}`}>
-              <input type="radio" name="billing" value={b.id} checked={mode === b.id} onChange={() => setMode(b.id)} />
-              <span className="billing__radio" aria-hidden="true" />
-              <span>{b.label}</span>
-            </label>
-          ))}
-        </fieldset>
-        <p className="billing__note" aria-live="polite">{BILLING[mode].note}</p>
+        <div className="pricing__industry" role="group" aria-label="Tailor plans to your industry">
+          <p className="pricing__industry-label">Tailor the plans to your industry</p>
+          <div className="pricing__chips">
+            {allIndustries.map((id) => (
+              <button key={id} type="button"
+                className={`chip ${id === industry ? 'is-active' : ''}`}
+                aria-pressed={id === industry}
+                onClick={() => pick(id)}>
+                {PRICING_EXAMPLES[id].label}
+              </button>
+            ))}
+          </div>
+        </div>
 
-        <ul className="plans">
+        <ul className="plans" aria-live="polite">
           {PLANS.map((p) => (
             <li key={p.id} className={`plan ${p.featured ? 'plan--featured' : ''}`}>
-              {p.featured && <span className="plan__badge">Most chosen starting point</span>}
+              {p.featured && <span className="plan__badge">Featured plan</span>}
               <h3 className="plan__name">{p.name}</h3>
-              <p className="plan__price">{p.price[mode]}</p>
-              <p className="plan__blurb">{p.blurb}</p>
-              <a href="#contact" className={`btn btn--block ${p.featured ? 'btn--light' : 'btn--ghost'}`}>{p.cta}</a>
-              <p className="plan__sep">{BILLING[mode].note}</p>
-              <hr />
-              <p className="plan__includes">{p.includesLabel}</p>
+              <p className="plan__price">{p.price}</p>
+              <p className="plan__blurb">{p.desc}</p>
+
+              <p className="plan__includes">Included in scope, subject to final proposal</p>
               <ul className="plan__features">
                 {p.features.map((f) => (<li key={f}><Check width={16} height={16} />{f}</li>))}
               </ul>
+
+              <p className="plan__examples-h">{ex.label === 'General business' ? 'Example workflows' : `Example workflows in ${ex.label}`}</p>
+              <ul className="plan__examples">
+                {ex[p.id].map((f) => (<li key={f}><Check width={16} height={16} />{f}</li>))}
+              </ul>
+
+              <a href="#contact" className={`btn btn--block ${p.featured ? 'btn--light' : 'btn--ghost'}`} onClick={choose(p)}>
+                {p.cta} <Arrow className="arrow" width={16} height={16} />
+              </a>
+              <p className="plan__suits">{p.suits}</p>
             </li>
           ))}
         </ul>
-        <p className="pricing__foot">Not sure which plan fits? Start with a consultation and we will recommend the smallest setup that solves the problem.</p>
+
+        <p className="pricing__foot">{PLANS_FOOTNOTE}</p>
       </div>
     </section>
   );

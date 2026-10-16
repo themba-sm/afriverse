@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { INDUSTRIES, SITE } from '../data/site.js';
 import { Arrow } from '../components/Icons.jsx';
 
-const EMPTY = { name: '', email: '', business: '', industry: '', message: '' };
+const EMPTY = { name: '', email: '', business: '', industry: '', plan: '', message: '' };
 
 function validate(v) {
   const e = {};
@@ -26,11 +26,20 @@ export default function Contact() {
   const [done, setDone] = useState(null);
   const [copied, setCopied] = useState(false);
 
-  // "Explore Solutions" links in the industry grid preselect the industry here.
+  // "Explore Solutions" links and pricing CTAs preselect fields here.
   useEffect(() => {
-    const pick = (e) => setValues((s) => ({ ...s, industry: e.detail }));
-    window.addEventListener('afriverse:industry', pick);
-    return () => window.removeEventListener('afriverse:industry', pick);
+    const pickIndustry = (e) => setValues((s) => ({ ...s, industry: e.detail }));
+    const pickPlan = (e) => setValues((s) => ({
+      ...s,
+      plan: e.detail.plan,
+      ...(e.detail.industry ? { industry: e.detail.industry } : {}),
+    }));
+    window.addEventListener('afriverse:industry', pickIndustry);
+    window.addEventListener('afriverse:plan', pickPlan);
+    return () => {
+      window.removeEventListener('afriverse:industry', pickIndustry);
+      window.removeEventListener('afriverse:plan', pickPlan);
+    };
   }, []);
 
   const set = (k) => (e) => {
@@ -39,7 +48,7 @@ export default function Contact() {
   };
 
   const summary = (v) =>
-    `AFRIVERSE enquiry\n\nName: ${v.name}\nEmail: ${v.email}\nBusiness: ${v.business || '-'}\nIndustry: ${v.industry || '-'}\n\n${v.message}`;
+    `AFRIVERSE enquiry\n\nName: ${v.name}\nEmail: ${v.email}\nBusiness: ${v.business || '-'}\nIndustry: ${v.industry || '-'}\nPlan of interest: ${v.plan || '-'}\n\n${v.message}`;
 
   const onSubmit = (ev) => {
     ev.preventDefault();
@@ -130,6 +139,14 @@ export default function Contact() {
                     <option value="Other">Other</option>
                   </select>
                 </div>
+              </div>
+              <div className="field">
+                <label htmlFor="f-plan">Plan of interest <span className="optional">(optional)</span></label>
+                <select id="f-plan" name="plan" value={values.plan} onChange={set('plan')}>
+                  <option value="">Select a plan</option>
+                  {['Essential', 'Growth', 'Scale'].map((pl) => (<option key={pl} value={pl}>{pl}</option>))}
+                  <option value="Not sure yet">Not sure yet</option>
+                </select>
               </div>
               <div className="field">
                 <label htmlFor="f-message">What would you like to improve?</label>
