@@ -1,0 +1,21 @@
+<!doctype html><meta charset="utf-8"><title>qa</title>
+<body style="font:12px monospace;background:#fff;color:#000;margin:8px"><pre id="out">running...</pre>
+<script>
+const widths=[320,360,375,390,430,768,1024,1440];
+const routes=['/','/#/industry/real-estate','/#/industry/legal','/#/industry/construction','/#/industry/professional','/#/industry/salon','/#/industry/fitness','/#/industry/automotive','/#/industry/fashion','/#/industry/barber','/#/industry/hospitality'];
+const out=document.getElementById('out');let lines=[];
+const MEASURE=(win)=>{const d=win.document,vw=d.documentElement.clientWidth;let off=[];
+ d.querySelectorAll('body *').forEach(el=>{const r=el.getBoundingClientRect();if(!r.width||!r.height)return;
+  if(r.right>vw+1||r.left<-1){let p=el.parentElement,clip=false;while(p&&p!==d.body){const cs=win.getComputedStyle(p);if(/(hidden|clip)/.test(cs.overflowX)){const pr=p.getBoundingClientRect();if(pr.right<=vw+1&&pr.left>=-1){clip=true;break}}p=p.parentElement}
+  if(!clip&&win.getComputedStyle(el).position!=='fixed')off.push(el.tagName+'.'+String(el.className&&el.className.baseVal===undefined?el.className:'').slice(0,40)+' L'+Math.round(r.left)+' R'+Math.round(r.right))}});
+ return {vw,sw:d.documentElement.scrollWidth,bw:d.body.scrollWidth,off:off.slice(0,5)}};
+const sleep=ms=>new Promise(r=>setTimeout(r,ms));
+(async()=>{let bad=0;
+for(const w of widths){for(const r of routes){
+ const f=document.createElement('iframe');f.style.cssText=`width:${w}px;height:800px;border:0;position:absolute;left:0;top:0;opacity:0`;f.src=r+(r.includes('#')?'':'?qa='+Date.now());document.body.appendChild(f);
+ await sleep(900);const win=f.contentWindow;
+ const h=win.document.documentElement.scrollHeight;for(let y=0;y<h;y+=700){win.scrollTo(0,y);await sleep(25)}
+ const m=MEASURE(win);const flag=m.sw>m.vw||m.off.length;if(flag){bad++;lines.push(`${w} ${r} vw=${m.vw} sw=${m.sw} ${JSON.stringify(m.off)}`)}
+ f.remove()}}
+lines.push('DONE pages-with-overflow='+bad+' of '+widths.length*routes.length);out.textContent=lines.join('\n');document.title='DONE'})();
+</script>
