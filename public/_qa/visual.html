@@ -1,0 +1,10 @@
+<!doctype html><meta charset="utf-8"><title>visual</title>
+<body style="margin:0;background:#888;font:12px monospace"><div id="row" style="display:flex;gap:12px;padding:8px;align-items:flex-start"></div>
+<script>
+const q=new URLSearchParams(location.search);const hash=q.get('r')||'';const sel=q.get('s')||'';const ws=(q.get('w')||'375').split(',').map(Number);const hh=+(q.get('h')||760);
+const row=document.getElementById('row');
+ws.forEach(w=>{const wrap=document.createElement('div');wrap.innerHTML=`<div style="color:#fff">${w}px ${hash} ${sel}</div>`;
+const f=document.createElement('iframe');f.style.cssText=`width:${w}px;height:${hh}px;border:2px solid #f0f;background:#000`;f.src='/?v='+Date.now()+hash;wrap.appendChild(f);row.appendChild(wrap);
+f.onload=()=>setTimeout(()=>{try{const d=f.contentDocument;d.documentElement.style.scrollBehavior='auto';const el=sel?d.querySelector(sel):null;if(el){const y=el.getBoundingClientRect().top+f.contentWindow.scrollY-80;f.contentWindow.scrollTo(0,y)}
+d.querySelectorAll('.reveal').forEach(e=>e.classList.add('is-in'))}catch(e){}},1200)});
+</script>
