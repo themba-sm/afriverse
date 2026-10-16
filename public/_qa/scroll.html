@@ -1,0 +1,31 @@
+<!doctype html><meta charset="utf-8"><title>scroll</title>
+<body style="font:13px monospace;margin:8px"><pre id="o">running</pre>
+<script>
+const o=document.getElementById('o'),L=[];const log=s=>{L.push(s);o.textContent=L.join('\n')};
+const sleep=ms=>new Promise(r=>setTimeout(r,ms));
+const W=()=>top2.contentWindow;
+const top2=document.createElement('iframe');top2.style.cssText='width:390px;height:700px;border:1px solid #000';document.body.appendChild(top2);
+const load=async(u)=>{top2.src=u;await new Promise(r=>{top2.onload=r});await sleep(1200)};
+(async()=>{
+ // 1. fresh open
+ await load('/?t=1'); log('1 fresh open scrollY='+W().scrollY);
+ // 2. scroll to bottom, click a nav link (sets no hash now), then reload
+ const d=W().document; d.documentElement.style.scrollBehavior='auto';
+ W().scrollTo(0,d.documentElement.scrollHeight); await sleep(500);
+ log('2 scrolled to bottom scrollY='+Math.round(W().scrollY)+' of '+d.documentElement.scrollHeight);
+ W().location.reload(); await new Promise(r=>{top2.onload=r}); await sleep(1500);
+ log('3 AFTER REFRESH from bottom scrollY='+Math.round(W().scrollY)+' hash="'+W().location.hash+'"');
+ // 4. click a section link, confirm scroll works and URL stays clean
+ const link=W().document.querySelector('.hero__actions a'); link.click(); await sleep(1500);
+ log('4 after clicking "Explore Our Solutions" scrollY='+Math.round(W().scrollY)+' hash="'+W().location.hash+'" (expect >0, clean url)');
+ // 5. refresh again from mid-page
+ W().location.reload(); await new Promise(r=>{top2.onload=r}); await sleep(1500);
+ log('5 AFTER REFRESH from mid-page scrollY='+Math.round(W().scrollY));
+ // 6. explicit fragment link opened fresh
+ await load('/?t=2#plans'); await sleep(800); log('6 fresh open of /#plans scrollY='+Math.round(W().scrollY)+' (expect >0: intentional anchor honoured)');
+ // 7. normal scrolling not hijacked
+ W().scrollTo(0,1500); await sleep(800); log('7 free scroll to 1500 -> scrollY='+Math.round(W().scrollY)+' (expect 1500)');
+ // 8. industry route then back
+ await load('/?t=3#/industry/legal'); log('8 industry route open scrollY='+Math.round(W().scrollY)+' title='+W().document.title);
+ log('DONE');document.title='DONE'})();
+</script>
