@@ -262,3 +262,71 @@
 /* ---------- Large desktop ---------- */
 @media (min-width: 1280px) { :root { --max: 1240px; } }
 @media (min-width: 1700px) { :root { --max: 1360px; } html { font-size: 17px; } }
+
+/* ---------- Industry solution pages (shared template) ---------- */
+.ind-hero { position: relative; overflow: hidden; padding-top: calc(var(--header-h) + clamp(2.5rem, 6vw, 4.5rem)); background: radial-gradient(44% 40% at 88% 0%, rgba(37,139,255,.12), transparent 70%), radial-gradient(44% 40% at 0% 100%, rgba(130,85,246,.12), transparent 70%), var(--c-black); }
+.crumbs { display: flex; align-items: center; gap: .55rem; margin-bottom: 2.25rem; font-size: .85rem; color: var(--c-grey); }
+.crumbs a { color: #9db9ff; text-decoration: none; }
+.crumbs a:hover { text-decoration: underline; }
+.ind-hero__grid { display: grid; gap: 3rem; align-items: center; padding-bottom: clamp(2.5rem, 6vw, 4.5rem); }
+.ind-hero__title { font-size: clamp(2.1rem, 5.2vw, 3.4rem); line-height: 1.06; letter-spacing: -.03em; font-weight: 500; margin: .4rem 0 1rem; text-wrap: balance; }
+.ind-hero__copy .contact__ctas { justify-content: flex-start; }
+.ind-hero__marks { display: flex; flex-wrap: wrap; gap: 1.1rem; margin-top: 1.6rem; font-size: .85rem; color: var(--c-grey); }
+.ind-hero__marks li { display: flex; align-items: center; gap: .45rem; }
+.ind-hero__marks svg { color: #7fa8ff; }
+/* UI illustration card */
+.ind-ui { background: linear-gradient(#ffffff, #f7f6f1) padding-box, linear-gradient(165deg, #258bff, #8255f6) border-box; border: 1.5px solid transparent; border-radius: var(--radius-lg); padding: 1.4rem; box-shadow: 0 40px 90px -30px rgba(0,0,0,.55), 0 24px 60px -30px rgba(109,63,224,.4); max-width: 26rem; justify-self: center; width: 100%; }
+.ind-ui__head { display: flex; align-items: center; gap: .8rem; padding-bottom: 1rem; border-bottom: 1px solid rgba(11,11,18,.1); }
+.ind-ui__icon { display: grid; place-items: center; width: 40px; height: 40px; border-radius: 12px; background: var(--grad); color: #fff; }
+.ind-ui__head p { font-size: .82rem; font-weight: 600; letter-spacing: .02em; color: var(--c-ink); }
+.ind-ui ul { list-style: none; padding: .9rem 0 .2rem; display: grid; gap: .65rem; }
+.ind-ui li { display: flex; align-items: center; justify-content: space-between; gap: .8rem; padding: .68rem .8rem; background: #fff; border: 1px solid rgba(11,11,18,.09); border-radius: 10px; animation: uiIn .5s ease backwards; }
+.ind-ui li:nth-child(2) { animation-delay: .12s; }
+.ind-ui li:nth-child(3) { animation-delay: .24s; }
+.ind-ui li p { font-size: .82rem; color: var(--c-ink); }
+.ind-ui__tag { flex: none; padding: .16rem .5rem; border-radius: 999px; font-size: .62rem; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: #1f74e6; background: rgba(37,139,255,.12); }
+.ind-ui li.is-last .ind-ui__tag { color: #5a46e8; background: rgba(130,85,246,.14); }
+.ind-ui__bar { display: flex; gap: .3rem; margin-top: .8rem; }
+.ind-ui__bar span { height: 3px; border-radius: 3px; background: rgba(11,11,18,.1); flex: 1; }
+.ind-ui__bar span:first-child { background: var(--grad); }
+@keyframes uiIn { from { opacity: 0; transform: translateY(8px); } }
+/* Challenges */
+.ind-challenges { display: grid; gap: 1.15rem; list-style: none; }
+.ind-challenge { background: #fff; border: 1px solid rgba(11,11,18,.11); border-radius: var(--radius-lg); padding: 1.5rem 1.6rem; box-shadow: 0 14px 34px -26px rgba(11,11,18,.35); }
+.ind-challenge__n { font-size: .8rem; font-weight: 700; letter-spacing: .1em; color: transparent; background: linear-gradient(100deg, #1f74e6, #6d3fe0); -webkit-background-clip: text; background-clip: text; }
+.ind-challenge .h3 { margin: .5rem 0 .45rem; font-size: 1.06rem; }
+.ind-challenge .muted { font-size: var(--fs-small); }
+/* Opportunities */
+.ind-opps { display: grid; gap: 1.15rem; list-style: none; }
+.ind-opp { display: flex; gap: 1.1rem; padding: 1.5rem; background: rgba(255,255,255,.03); border: 1px solid var(--c-line-dark); border-radius: var(--radius-lg); }
+.ind-opp__icon { flex: none; display: grid; place-items: center; width: 38px; height: 38px; border-radius: 12px; background: linear-gradient(135deg, rgba(37,139,255,.18), rgba(130,85,246,.18)); color: #8ab8ff; }
+.ind-opp .h3 { font-size: 1.02rem; margin-bottom: .4rem; }
+.ind-opp .muted { font-size: var(--fs-small); }
+/* Workflows */
+.ind-wfs { display: grid; gap: 1.15rem; list-style: none; }
+.ind-wf { background: #fff; border: 1px solid rgba(11,11,18,.11); border-radius: var(--radius-lg); padding: 1.5rem; box-shadow: 0 14px 34px -26px rgba(11,11,18,.35); }
+.ind-wf .h3 { font-size: 1.05rem; margin-bottom: 1.1rem; }
+.ind-wf .wf__step { padding-bottom: .9rem; }
+.ind-wf .wf__step:not(:last-child)::before { top: 36px; }
+.ind-note { margin-top: 1.75rem; max-width: 72ch; font-size: var(--fs-small); color: var(--c-ink-soft); border-top: 1px solid rgba(11,11,18,.1); padding-top: 1.25rem; }
+/* Flow visual */
+.ind-flow { display: grid; gap: 1.25rem; list-style: none; counter-reset: flow; }
+.ind-flow li { position: relative; display: flex; align-items: center; gap: 1rem; padding: 1.15rem 1.35rem; background: rgba(255,255,255,.03); border: 1px solid var(--c-line-dark); border-radius: var(--radius-lg); }
+.ind-flow__dot { flex: none; display: grid; place-items: center; width: 40px; height: 40px; border-radius: 50%; background: var(--grad); color: #fff; font-weight: 600; }
+.ind-flow p { font-size: .98rem; }
+/* Value */
+.ind-value { display: grid; gap: .9rem; list-style: none; max-width: 46rem; }
+.ind-value li { display: flex; align-items: flex-start; gap: .8rem; padding: 1rem 1.25rem; background: #fff; border: 1px solid rgba(11,11,18,.11); border-radius: 12px; font-size: .95rem; box-shadow: 0 10px 26px -22px rgba(11,11,18,.35); }
+.ind-value svg { flex: none; margin-top: .2rem; color: #1f74e6; }
+/* Responsive */
+@media (min-width: 720px) {
+  .ind-challenges { grid-template-columns: repeat(2, 1fr); }
+  .ind-opps { grid-template-columns: repeat(3, 1fr); }
+  .ind-value { grid-template-columns: repeat(2, 1fr); }
+  .ind-flow { grid-template-columns: repeat(4, 1fr); gap: 1rem; }
+  .ind-flow li { flex-direction: column; align-items: flex-start; }
+}
+@media (min-width: 860px) {
+  .ind-hero__grid { grid-template-columns: 1.15fr 1fr; gap: 4rem; }
+  .ind-wfs { grid-template-columns: repeat(3, 1fr); }
+}

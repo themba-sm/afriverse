@@ -2,12 +2,8 @@ import Reveal from '../components/Reveal.jsx';
 import { INDUSTRIES } from '../data/site.js';
 import { IndustryIcon, Check, Arrow } from '../components/Icons.jsx';
 
-/* "Explore Solutions" preselects the industry in the consultation form and
-   scrolls the visitor to it, so the link is functional, not decorative. */
-const explore = (ind) => (e) => {
-  window.dispatchEvent(new CustomEvent('afriverse:industry', { detail: ind.name }));
-  document.getElementById('contact-form-card')?.scrollIntoView({ behavior: 'smooth', block: 'center' });
-};
+/* Each card opens that industry's dedicated solution page, which carries
+   the industry into its own consultation form and pricing view. */
 
 export default function Industries() {
   return (
@@ -31,7 +27,7 @@ export default function Industries() {
               <ul className="industry__uses">
                 {ind.uses.map((u) => (<li key={u}><Check width={15} height={15} />{u}</li>))}
               </ul>
-              <a href="#contact" className="industry__link" onClick={explore(ind)}>
+              <a href={`#/industry/${ind.id}`} className="industry__link">
                 Explore Solutions <Arrow className="arrow" width={16} height={16} />
               </a>
             </Reveal>

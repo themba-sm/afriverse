@@ -15,11 +15,14 @@ const fromUrl = () => {
   return allIndustries.includes(id) ? id : 'general';
 };
 
-export default function Pricing() {
-  const [industry, setIndustry] = useState(fromUrl);
+export default function Pricing({ industry: locked }) {
+  // On an industry page the industry is locked to that page; on the homepage
+  // the visitor picks one via the chips and it persists in ?industry=.
+  const [picked, setPicked] = useState(fromUrl());
+  const industry = locked || picked;
 
   const pick = (id) => {
-    setIndustry(id);
+    setPicked(id);
     const url = new URL(window.location);
     if (id === 'general') url.searchParams.delete('industry');
     else url.searchParams.set('industry', id);
@@ -29,7 +32,7 @@ export default function Pricing() {
   // Deep link support: if the industry param changes (e.g. browser back),
   // keep the cards in sync.
   useEffect(() => {
-    const sync = () => setIndustry(fromUrl());
+    const sync = () => setPicked(fromUrl());
     window.addEventListener('popstate', sync);
     return () => window.removeEventListener('popstate', sync);
   }, []);
@@ -53,19 +56,21 @@ export default function Pricing() {
           <p className="lead">Start with the processes that matter most, then expand as your business and requirements evolve.</p>
         </div>
 
-        <div className="pricing__industry" role="group" aria-label="Tailor plans to your industry">
-          <p className="pricing__industry-label">Tailor the plans to your industry</p>
-          <div className="pricing__chips">
-            {allIndustries.map((id) => (
-              <button key={id} type="button"
-                className={`chip ${id === industry ? 'is-active' : ''}`}
-                aria-pressed={id === industry}
-                onClick={() => pick(id)}>
-                {PRICING_EXAMPLES[id].label}
-              </button>
-            ))}
+        {!locked && (
+          <div className="pricing__industry" role="group" aria-label="Tailor plans to your industry">
+            <p className="pricing__industry-label">Tailor the plans to your industry</p>
+            <div className="pricing__chips">
+              {allIndustries.map((id) => (
+                <button key={id} type="button"
+                  className={`chip ${id === industry ? 'is-active' : ''}`}
+                  aria-pressed={id === industry}
+                  onClick={() => pick(id)}>
+                  {PRICING_EXAMPLES[id].label}
+                </button>
+              ))}
+            </div>
           </div>
-        </div>
+        )}
 
         <ul className="plans" aria-live="polite">
           {PLANS.map((p) => (

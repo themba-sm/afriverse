@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { NAV } from '../data/site.js';
+import { toSection } from '../lib/nav.js';
 import { LogoEmblem, LogoWordmark } from './Logo.jsx';
 import { Menu, Close, Arrow } from './Icons.jsx';
 
@@ -51,12 +52,15 @@ export default function Header() {
 
         <nav className="nav-desktop" aria-label="Primary">
           <ul>
-            {NAV.map((n) => (<li key={n.href}><a href={n.href}>{n.label}</a></li>))}
+            {NAV.map((n) => {
+              const sec = n.href.replace('#', '');
+              return (<li key={n.href}><a href={n.href} onClick={toSection(sec)}>{n.label}</a></li>);
+            })}
           </ul>
         </nav>
 
         <div className="site-header__actions">
-          <a href="#contact" className="btn btn--primary btn--sm header-cta">Request a Consultation</a>
+          <a href="#contact" className="btn btn--primary btn--sm header-cta" onClick={toSection('contact')}>Request a Consultation</a>
           <button
             ref={toggleRef}
             type="button"
@@ -74,10 +78,13 @@ export default function Header() {
       <div id="mobile-menu" ref={panelRef} className={`mobile-menu ${open ? 'is-open' : ''}`} hidden={!open}>
         <nav aria-label="Mobile">
           <ul>
-            {NAV.map((n) => (<li key={n.href}><a href={n.href} onClick={close}>{n.label}<Arrow width={18} height={18} /></a></li>))}
+            {NAV.map((n) => {
+              const sec = n.href.replace('#', '');
+              return (<li key={n.href}><a href={n.href} onClick={(e) => { close(); toSection(sec)(e); }}>{n.label}<Arrow width={18} height={18} /></a></li>);
+            })}
           </ul>
         </nav>
-        <a href="#contact" className="btn btn--primary btn--block" onClick={close}>Request a Consultation</a>
+        <a href="#contact" className="btn btn--primary btn--block" onClick={(e) => { close(); toSection('contact')(e); }}>Request a Consultation</a>
       </div>
     </header>
   );
