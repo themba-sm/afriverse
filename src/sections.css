@@ -24,9 +24,20 @@
 .header-cta { display: none; }
 .menu-toggle { width: 44px; height: 44px; display: grid; place-items: center; background: transparent; border: 1px solid var(--c-line-dark-strong); border-radius: 12px; color: var(--c-white); }
 .menu-toggle:hover { border-color: var(--c-white); }
-.mobile-menu { position: fixed; inset: var(--header-h) 0 0 0; width: 100%; max-width: 100%; overscroll-behavior: contain; background: var(--c-black); padding: 1.5rem var(--gutter) 2rem; display: flex; flex-direction: column; gap: 1.5rem; overflow-y: auto; }
+/* Mobile menu: locked to the visible screen height. Never scrolls: the items
+   compress (via dvh-based clamps) so all links and the CTA always fit. */
+.mobile-menu { position: fixed; top: var(--header-h); left: 0; right: 0; height: calc(100dvh - var(--header-h)); width: 100%; max-width: 100%; background: var(--c-black); padding: clamp(.4rem, 2dvh, 1.5rem) var(--gutter) clamp(.6rem, 2.5dvh, 2rem); display: flex; flex-direction: column; justify-content: center; gap: clamp(.4rem, 2dvh, 1.5rem); overflow: hidden; }
+@supports not (height: 100dvh) { .mobile-menu { height: calc(100vh - var(--header-h)); } }
 .mobile-menu[hidden] { display: none; }
-.mobile-menu li a { display: flex; align-items: center; justify-content: space-between; padding: 1.1rem 0; font-size: 1.35rem; letter-spacing: -.02em; text-decoration: none; border-bottom: 1px solid var(--c-line-dark); }
+.mobile-menu li a { display: flex; align-items: center; justify-content: space-between; padding: clamp(.5rem, .45rem + 1dvh, 1.1rem) 0; font-size: clamp(1rem, .9rem + .6dvh, 1.35rem); letter-spacing: -.02em; text-decoration: none; border-bottom: 1px solid var(--c-line-dark); }
+/* Landscape phones (wide but short): two columns keep every option visible
+   without scrolling. */
+@media (max-height: 540px) and (max-width: 979px) {
+  .mobile-menu { justify-content: flex-start; }
+  .mobile-menu nav ul { display: grid; grid-template-columns: 1fr 1fr; column-gap: 1.25rem; }
+  .mobile-menu li a { font-size: 1rem; padding: .55rem 0; }
+  .mobile-menu .btn { margin-top: .25rem; }
+}
 @media (min-width: 980px) {
   .nav-desktop { display: block; }
   .header-cta { display: inline-flex; }
