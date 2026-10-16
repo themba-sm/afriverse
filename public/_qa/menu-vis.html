@@ -1,0 +1,9 @@
+<!doctype html><meta charset="utf-8"><title>menuvis</title>
+<body style="margin:0;background:#666;display:flex;gap:14px;padding:10px"><div id="r"></div>
+<script>
+[[360,640],[844,390]].forEach(([w,h])=>{const wrap=document.createElement('div');
+wrap.innerHTML=`<div style="color:#fff;font:12px monospace">${w}x${h}</div>`;
+const f=document.createElement('iframe');f.style.cssText=`width:${w}px;height:${h}px;border:2px solid #f0f`;f.src='/?mv='+Date.now()+w;
+wrap.appendChild(f);document.getElementById('r').appendChild(wrap);
+f.onload=()=>setTimeout(()=>{try{f.contentDocument.querySelector('.menu-toggle').click()}catch(e){}},1200)});
+</script>
