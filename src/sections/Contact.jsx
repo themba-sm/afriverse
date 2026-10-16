@@ -1,5 +1,6 @@
 import { Arrow } from '../components/Icons.jsx';
 import ConsultationForm from '../components/ConsultationForm.jsx';
+import { toSection } from '../lib/nav.js';
 
 /*
  * Homepage consultation section: copy on the left, reusable enquiry form on
@@ -24,7 +25,7 @@ export default function Contact() {
           </p>
           <div className="contact__ctas">
             <a href="#contact-form-card" className="btn btn--primary" onClick={toForm}>Book a Consultation <Arrow className="arrow" width={18} height={18} /></a>
-            <a href="#industries" className="btn btn--ghost">Explore Industries</a>
+            <a href="#industries" className="btn btn--ghost" onClick={toSection('industries')}>Explore Industries</a>
           </div>
           <ul className="contact__points">
             <li>Describe your business and your biggest time drain</li>

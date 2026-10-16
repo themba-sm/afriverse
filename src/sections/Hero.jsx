@@ -1,4 +1,5 @@
 import { Arrow } from '../components/Icons.jsx';
+import { toSection } from '../lib/nav.js';
 
 /*
  * Signature hero. Composition follows the supplied reference: ivory field,
@@ -43,8 +44,8 @@ export default function Hero() {
           for meaningful growth with intelligent automation.
         </p>
         <div className="hero__actions">
-          <a href="#services" className="btn btn--primary">Explore Our Solutions <Arrow className="arrow" width={18} height={18} /></a>
-          <a href="#contact" className="btn btn--outline-ink">Book a Consultation</a>
+          <a href="#services" className="btn btn--primary" onClick={toSection('services')}>Explore Our Solutions <Arrow className="arrow" width={18} height={18} /></a>
+          <a href="#contact" className="btn btn--outline-ink" onClick={toSection('contact')}>Book a Consultation</a>
         </div>
 
         <figure className="hero__hand">
