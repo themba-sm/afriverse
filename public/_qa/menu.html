@@ -1,0 +1,24 @@
+<!doctype html><meta charset="utf-8"><title>menu</title>
+<body style="font:12px monospace;margin:6px"><pre id="o">running</pre>
+<script>
+const sizes=[[320,568],[360,640],[375,667],[390,844],[430,932],[844,390],[740,360],[930,430]];
+const o=document.getElementById('o'),L=[];const log=s=>{L.push(s);o.textContent=L.join('\n')};
+const sleep=ms=>new Promise(r=>setTimeout(r,ms));
+(async()=>{let bad=0;
+for(const [w,h] of sizes){
+ const f=document.createElement('iframe');f.style.cssText=`width:${w}px;height:${h}px;border:1px solid #888;position:absolute;left:-9999px`;f.src='/?m='+w+'_'+h;document.body.appendChild(f);
+ await new Promise(r=>{f.onload=r});await sleep(900);
+ const W=f.contentWindow,D=W.document;
+ D.querySelector('.menu-toggle').click(); await sleep(400);
+ const m=D.querySelector('#mobile-menu');
+ const fits = m.scrollHeight <= m.clientHeight + 1;
+ const last = m.querySelector('.btn').getBoundingClientRect();
+ const vis = last.bottom <= (m.clientHeight + D.querySelector('.site-header').getBoundingClientRect().height) && last.top >= 0;
+ const overflowStyle = W.getComputedStyle(m).overflowY;
+ const rows = new Set([...m.querySelectorAll('li a')].map(a=>Math.round(a.getBoundingClientRect().left/8))).size;
+ log(`${w}x${h} menuScroll=${m.scrollHeight}/${m.clientHeight} ${fits?'FITS':'SCROLLS'} lastBtnVisible=${vis?'yes':'NO'} overflowY=${overflowStyle}`);
+ if(!fits||!vis)bad++;
+ f.remove();
+}
+log('DONE bad='+bad);document.title='DONE'})();
+</script>
