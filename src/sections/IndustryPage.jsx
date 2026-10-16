@@ -4,6 +4,7 @@ import ConsultationForm from '../components/ConsultationForm.jsx';
 import Pricing from './Pricing.jsx';
 import { INDUSTRY_PAGES } from '../data/industries.js';
 import { IndustryIcon, Check, Arrow } from '../components/Icons.jsx';
+import { toSection } from '../lib/nav.js';
 
 /*
  * Shared industry solution template. One component renders every industry
@@ -28,7 +29,7 @@ export default function IndustryPage({ id }) {
       <section className={`section ind-hero section--dark`} aria-labelledby="ind-title">
         <div className="container">
           <nav className="crumbs" aria-label="Breadcrumb">
-            <a href="#industries" data-nav>Industries</a>
+            <a href="#industries" onClick={toSection('industries')}>Industries</a>
             <span aria-hidden="true">/</span>
             <span aria-current="page">{d.name}</span>
           </nav>
