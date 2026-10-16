@@ -4,3 +4,8 @@ dist
 *.log
 work/
 preview.html
+.env
+.env.local
+.env.*.local
+shots/
+.vercel

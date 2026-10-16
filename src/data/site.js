@@ -4,9 +4,12 @@ export const SITE = {
   // Official contact details are not yet supplied; set these when known.
   email: '',
   whatsapp: '',
-  // Secure server-side submission endpoint (validates, rate-limits and
-  // stores enquiries durably; no keys in frontend code).
-  enquiryEndpoint: 'https://superagent-d73eed69.base44.app/functions/afriverseEnquirySubmit',
+  // Secure server-side submission endpoint (validates, rate-limits and stores
+  // enquiries durably; no keys in frontend code). Overridable via the
+  // VITE_ENQUIRY_ENDPOINT variable (see .env.example).
+  enquiryEndpoint:
+    import.meta.env.VITE_ENQUIRY_ENDPOINT ||
+    'https://superagent-d73eed69.base44.app/functions/afriverseEnquirySubmit',
   // Real privacy policy URL: set when published; the consent text links to it.
   privacyUrl: '',
 };
