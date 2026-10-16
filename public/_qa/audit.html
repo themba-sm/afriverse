@@ -15,10 +15,10 @@ function measure(win){const d=win.document,vw=d.documentElement.clientWidth;cons
 for(const w of widths){
  const f=document.createElement('iframe');f.style.cssText=`width:${w}px;height:700px;border:0;position:absolute;left:0;top:0;visibility:hidden`;document.body.appendChild(f);
  for(const r of routes){
-  f.src='/?qa='+w+'_'+n+r; await new Promise(res=>{f.onload=res;setTimeout(res,6000)}); await sleep(400);
+  f.src='about:blank'; await sleep(60); f.src='/?qa='+w+'_'+n+r; await new Promise(res=>{f.onload=res;setTimeout(res,6000)}); await sleep(700);
   const win=f.contentWindow;try{
    const h=win.document.documentElement.scrollHeight;for(let y=0;y<h;y+=900){win.scrollTo(0,y);await sleep(15)}
-   const m=measure(win);n++;if(m.sw>m.vw||m.off.length){bad++;log(`FAIL w=${w} ${r||'/'} vw=${m.vw} sw=${m.sw} ${JSON.stringify(m.off)}`)}
+   const m=measure(win);m.route=win.location.hash||'(home)';m.h1=(win.document.querySelector('h1')||{}).textContent;n++;if(m.sw>m.vw||m.off.length){bad++;log(`FAIL w=${w} ${m.route} [${(m.h1||'').slice(0,28)}] vw=${m.vw} sw=${m.sw} ${JSON.stringify(m.off)}`)}
   }catch(e){log('ERR '+w+' '+r+' '+e.message)}}
  log('width '+w+' checked ('+routes.length+' pages)');f.remove()}
 log('DONE checked='+n+' failures='+bad);document.title='DONE'})();
