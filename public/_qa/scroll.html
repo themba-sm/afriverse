@@ -23,8 +23,9 @@ const load=async(u)=>{top2.src=u;await new Promise(r=>{top2.onload=r});await sle
  log('5 AFTER REFRESH from mid-page scrollY='+Math.round(W().scrollY));
  // 6. explicit fragment link opened fresh
  await load('/?t=2#plans'); await sleep(800); log('6 fresh open of /#plans scrollY='+Math.round(W().scrollY)+' (expect >0: intentional anchor honoured)');
- // 7. normal scrolling not hijacked
- W().scrollTo(0,1500); await sleep(800); log('7 free scroll to 1500 -> scrollY='+Math.round(W().scrollY)+' (expect 1500)');
+ // 7. free scrolling is not hijacked: fresh home, scroll to several offsets, each must hold
+ await load('/?t=7'); W().document.documentElement.style.scrollBehavior='auto';
+ for (const y of [800,1500,3000,600]) { W().scrollTo(0,y); await sleep(1200); log('7 scroll to '+y+' -> scrollY='+Math.round(W().scrollY)+' (must equal '+y+')'); }
  // 8. industry route then back
  await load('/?t=3#/industry/legal'); log('8 industry route open scrollY='+Math.round(W().scrollY)+' title='+W().document.title);
  log('DONE');document.title='DONE'})();
